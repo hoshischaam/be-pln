@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pln_db
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d pln_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    ports:
+      # --- INI ADALAH PERBAIKANNYA ---
+      # Hapus 'ports:' yang ganda. Hanya 'ports:' satu kali
+      # diikuti dengan array '- ...'
+      - "0.0.0.0:3000:3000"
+    environment:
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: pln_db
+      JWT_SECRET: "j2+VKY451u4VBKGEG/WlahM84Co/uvMk0Aqv4rV/H3XmRs0h2YnSiPkcwvpgoZXXGgNLeKYGNE6qNgQfGbOUSrw=="
+      PORT: 3000
+      APP_ENV: development
+      MIDTRANS_SERVER_KEY: "MIDTRANS_SERVER_KEY_REDACTED"
+      MIDTRANS_CLIENT_KEY: "MIDTRANS_CLIENT_KEY_REDACTED"
+      MIDTRANS_SNAP_BASE_URL: "https://app.sandbox.midtrans.com/snap/v1/transactions"
+      MIDTRANS_CALLBACK_TOKEN: "sandbox-callback-token"
+      MIDTRANS_IRIS_CLIENT_KEY: ""
+      MIDTRANS_IRIS_CLIENT_SECRET: ""
+      MIDTRANS_IRIS_BASE_URL: "https://app.sandbox.midtrans.com/iris/api/v1/payouts"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
