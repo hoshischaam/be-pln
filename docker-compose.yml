@@ -32,8 +32,8 @@ services:
       JWT_SECRET: "j2+VKY451u4VBKGEG/WlahM84Co/uvMk0Aqv4rV/H3XmRs0h2YnSiPkcwvpgoZXXGgNLeKYGNE6qNgQfGbOUSrw=="
       PORT: 3000
       APP_ENV: development
-      MIDTRANS_SERVER_KEY: "MIDTRANS_SERVER_KEY_REDACTED"
-      MIDTRANS_CLIENT_KEY: "MIDTRANS_CLIENT_KEY_REDACTED"
+      MIDTRANS_SERVER_KEY: "${MIDTRANS_SERVER_KEY:-}"
+      MIDTRANS_CLIENT_KEY: "${MIDTRANS_CLIENT_KEY:-}"
       MIDTRANS_SNAP_BASE_URL: "https://app.sandbox.midtrans.com/snap/v1/transactions"
       MIDTRANS_CALLBACK_TOKEN: "sandbox-callback-token"
       MIDTRANS_IRIS_CLIENT_KEY: ""

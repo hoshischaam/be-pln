@@ -46,7 +46,7 @@ func main() {
 
 	midtransServerKey := strings.TrimSpace(os.Getenv("MIDTRANS_SERVER_KEY"))
 	if midtransServerKey == "" {
-		midtransServerKey = "MIDTRANS_SERVER_KEY_REDACTED"
+		log.Println("warning: MIDTRANS_SERVER_KEY kosong, integrasi Midtrans Snap dimatikan")
 	}
 	snapBaseURL := strings.TrimSpace(os.Getenv("MIDTRANS_SNAP_BASE_URL"))
 	var snapClient *services.SnapClient
