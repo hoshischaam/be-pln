@@ -95,6 +95,9 @@ func (h *WalletHandler) MidtransNotification(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"error": err.Error()})
 	}
 	if err := h.svc.HandleSnapNotification(c.Context(), payload); err != nil {
+		if _, ok := err.(services.ErrNotFoundResource); ok {
+			return c.Status(200).JSON(fiber.Map{"status": "ignored", "message": err.Error()})
+		}
 		return mapError(c, err)
 	}
 	return c.Status(200).JSON(fiber.Map{"status": "ok"})
