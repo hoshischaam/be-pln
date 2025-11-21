@@ -63,6 +63,14 @@ func envBcryptCost(def int) int {
 
 func isDev() bool { return strings.EqualFold(os.Getenv("APP_ENV"), "development") }
 
+func allowResetTokenDebug() bool {
+	if isDev() {
+		return true
+	}
+	val := strings.TrimSpace(os.Getenv("EXPOSE_RESET_TOKENS"))
+	return strings.EqualFold(val, "true") || val == "1"
+}
+
 // masking helper biar log aman
 func maskEmail(e string) string {
 	e = strings.TrimSpace(e)
@@ -351,7 +359,7 @@ func (h *AuthHandler) ForgotPassword(c *fiber.Ctx) error {
 
 	// TODO: kirim email berisi link reset (tokenID + raw token via URL) ke user
 	out := fiber.Map{"message": "If the email exists, a reset link has been sent"}
-	if isDev() {
+	if allowResetTokenDebug() {
 		// untuk dev/testing manual
 		out["tokenId"] = tokenID
 		out["tokenDev"] = raw
