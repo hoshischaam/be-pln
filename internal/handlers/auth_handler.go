@@ -68,6 +68,7 @@ func allowResetTokenDebug() bool {
 		return true
 	}
 	val := strings.TrimSpace(os.Getenv("EXPOSE_RESET_TOKENS"))
+	fmt.Println("allowResetTokenDebug: EXPOSE_RESET_TOKENS =", val)
 	return strings.EqualFold(val, "true") || val == "1"
 }
 
